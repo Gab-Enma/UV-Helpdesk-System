@@ -82,9 +82,61 @@ async function renderTicketsForStudent() {
   ordered.forEach((t) => {
     const item = document.createElement("div");
     item.className = "ticket-item";
-    item.innerHTML = `<h3>${t.title}</h3>
-      <p>${t.description}</p>
-      <small>Priority: ${t.priority} · Status: ${t.status} · Category: ${t.category} · Created: ${new Date(t.createdAt).toLocaleString()}</small>`;
+    item.style.border = "1px solid var(--border)";
+    item.style.borderRadius = "10px";
+    item.style.padding = "0.9rem";
+    item.style.margin = "0.65rem 0";
+
+    const title = document.createElement("h3");
+    title.textContent = t.title;
+    title.style.margin = "0";
+    title.style.cursor = "pointer";
+    title.style.color = "var(--primary)";
+
+    const summary = document.createElement("p");
+    summary.textContent = t.description;
+    summary.style.margin = "0.3rem 0";
+
+    const meta = document.createElement("small");
+    meta.innerHTML = `Priority: ${t.priority} · Status: ${t.status} · Category: ${t.category} · Created: ${new Date(t.createdAt).toLocaleString()}`;
+
+    const details = document.createElement("div");
+    details.style.display = "none";
+    details.style.marginTop = "0.65rem";
+
+    const commentsHeader = document.createElement("h4");
+    commentsHeader.textContent = "Admin Feedback";
+    commentsHeader.style.margin = "0 0 0.5rem 0";
+    details.appendChild(commentsHeader);
+
+    const commentsContainer = document.createElement("div");
+    if (t.comments && t.comments.length > 0) {
+      t.comments.forEach((c) => {
+        const commentItem = document.createElement("div");
+        commentItem.style.border = "1px solid var(--border)";
+        commentItem.style.borderRadius = "5px";
+        commentItem.style.padding = "0.5rem";
+        commentItem.style.marginBottom = "0.5rem";
+        commentItem.innerHTML = `<strong>${c.author}</strong> (${new Date(c.createdAt).toLocaleString()}): <br>${c.text}`;
+        commentsContainer.appendChild(commentItem);
+      });
+    } else {
+      const noComments = document.createElement("p");
+      noComments.className = "muted";
+      noComments.style.margin = "0";
+      noComments.textContent = "No feedback yet. Check later for updates from staff.";
+      commentsContainer.appendChild(noComments);
+    }
+    details.appendChild(commentsContainer);
+
+    title.addEventListener("click", () => {
+      details.style.display = details.style.display === "none" ? "block" : "none";
+    });
+
+    item.appendChild(title);
+    item.appendChild(summary);
+    item.appendChild(meta);
+    item.appendChild(details);
     ticketList.appendChild(item);
   });
 

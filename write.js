@@ -70,21 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const ticket = { title, description, priority, category };
       const token = localStorage.getItem("authToken");
-
-      try {
-        await apiRequest("/tickets", "POST", ticket, token);
-        alert("Ticket submitted and routed to " + category + " dashboard.");
-        form.reset();
-        window.location.href = redirectForUser();
-        return;
-      } catch (apiError) {
-        console.warn("API store unavailable, using local fallback:", apiError);
-      }
-
-      const tickets = getTickets();
       const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+
       const newTicket = {
         id: Date.now(),
         title,
@@ -96,8 +84,23 @@ document.addEventListener("DOMContentLoaded", function () {
         submitterEmail: user ? user.email : "",
       };
 
+      // Persist in local storage so dashboards immediately reflect the ticket
+      const tickets = getTickets();
       tickets.push(newTicket);
       setTickets(tickets);
+
+      if (token) {
+        try {
+          await apiRequest("/tickets", "POST", {
+            title,
+            description,
+            priority,
+            category,
+          }, token);
+        } catch (apiError) {
+          console.warn("API store unavailable, using local fallback:", apiError);
+        }
+      }
 
       alert("Ticket submitted and routed to " + category + " dashboard.");
       form.reset();

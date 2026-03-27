@@ -67,6 +67,8 @@ function logout() {
 
 async function renderTicketsForCategory(category) {
   let tickets = getTickets().filter((t) => t.category === category);
+  console.log("All tickets:", getTickets());
+  console.log("Filtered tickets for category", category, ":", tickets);
 
   const token = localStorage.getItem("authToken");
   if (token) {
@@ -79,11 +81,14 @@ async function renderTicketsForCategory(category) {
       );
       if (apiTickets.length > 0) {
         tickets = apiTickets; // Use API tickets if available
+        console.log("Using API tickets:", apiTickets);
       }
     } catch (apiError) {
       console.warn("API ticket fetch failed, using local tickets:", apiError);
     }
   }
+
+  console.log("Final tickets to render:", tickets);
 
   // Rest of the function remains the same
 

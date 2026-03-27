@@ -105,9 +105,49 @@ app.post("/api/tickets", authenticate, (req, res) => {
     createdAt: new Date().toISOString(),
     owner: req.user.id,
     submitterEmail: req.user.email,
+    comments: [],
   };
   tickets.push(ticket);
   res.json(ticket);
+});
+
+app.put("/api/tickets/:ticketId", authenticate, (req, res) => {
+  const ticketId = Number(req.params.ticketId);
+  const ticket = tickets.find((t) => t.id === ticketId);
+  if (!ticket) {
+    return res.status(404).json({ message: "Ticket not found" });
+  }
+
+  const { status } = req.body;
+  if (status && ["Open", "In Progress", "Resolved"].includes(status)) {
+    ticket.status = status;
+  }
+
+  return res.json(ticket);
+});
+
+app.post("/api/tickets/:ticketId/comments", authenticate, (req, res) => {
+  const ticketId = Number(req.params.ticketId);
+  const ticket = tickets.find((t) => t.id === ticketId);
+  if (!ticket) {
+    return res.status(404).json({ message: "Ticket not found" });
+  }
+
+  const { text } = req.body;
+  if (!text || typeof text !== "string") {
+    return res.status(400).json({ message: "Comment text is required" });
+  }
+
+  const comment = {
+    author: req.user.name || req.user.email,
+    text,
+    createdAt: new Date().toISOString(),
+  };
+
+  ticket.comments = ticket.comments || [];
+  ticket.comments.push(comment);
+
+  return res.json(comment);
 });
 
 app.get("/api/tickets", authenticate, (req, res) => {

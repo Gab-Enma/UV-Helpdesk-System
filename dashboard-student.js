@@ -124,13 +124,15 @@ async function renderTicketsForStudent() {
       const noComments = document.createElement("p");
       noComments.className = "muted";
       noComments.style.margin = "0";
-      noComments.textContent = "No feedback yet. Check later for updates from staff.";
+      noComments.textContent =
+        "No feedback yet. Check later for updates from staff.";
       commentsContainer.appendChild(noComments);
     }
     details.appendChild(commentsContainer);
 
     title.addEventListener("click", () => {
-      details.style.display = details.style.display === "none" ? "block" : "none";
+      details.style.display =
+        details.style.display === "none" ? "block" : "none";
     });
 
     item.appendChild(title);

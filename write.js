@@ -91,14 +91,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (token) {
         try {
-          await apiRequest("/tickets", "POST", {
-            title,
-            description,
-            priority,
-            category,
-          }, token);
+          await apiRequest(
+            "/tickets",
+            "POST",
+            {
+              title,
+              description,
+              priority,
+              category,
+            },
+            token,
+          );
         } catch (apiError) {
-          console.warn("API store unavailable, using local fallback:", apiError);
+          console.warn(
+            "API store unavailable, using local fallback:",
+            apiError,
+          );
         }
       }
 

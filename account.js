@@ -29,6 +29,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  // Add toggle password functionality
+  const togglePasswordBtns = document.querySelectorAll(".toggle-password");
+  togglePasswordBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const input = btn.previousElementSibling;
+      if (input && input.tagName === "INPUT") {
+        if (input.type === "password") {
+          input.type = "text";
+          btn.textContent = "Hide";
+        } else {
+          input.type = "password";
+          btn.textContent = "Show";
+        }
+      }
+    });
+  });
+
   const user = getCurrentUser();
   if (!user) {
     window.location.href = "login.html";

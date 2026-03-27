@@ -83,25 +83,29 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Found toggle buttons:", togglePasswordBtns.length);
   
   togglePasswordBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", function(e) {
       e.preventDefault();
       e.stopPropagation();
       console.log("Toggle button clicked");
       
-      const input = btn.parentElement.querySelector(
-        "input[type='password'], input[type='text']",
-      );
-      console.log("Found input:", input);
+      // Find parent div that contains both input and button
+      const parentDiv = btn.closest("div[style*='position']");
+      console.log("Parent div:", parentDiv);
       
-      if (input) {
-        if (input.type === "password") {
-          input.type = "text";
-          btn.textContent = "Hide";
-          console.log("Password shown");
-        } else {
-          input.type = "password";
-          btn.textContent = "Show";
-          console.log("Password hidden");
+      if (parentDiv) {
+        const input = parentDiv.querySelector("input");
+        console.log("Found input:", input, "Type:", input?.type);
+        
+        if (input) {
+          if (input.type === "password") {
+            input.type = "text";
+            btn.textContent = "Hide";
+            console.log("Password shown");
+          } else {
+            input.type = "password";
+            btn.textContent = "Show";
+            console.log("Password hidden");
+          }
         }
       }
     });

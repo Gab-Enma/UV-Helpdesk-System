@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
   togglePasswordBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
-      const input = btn.previousElementSibling;
-      if (input && input.tagName === "INPUT") {
+      const input = btn.parentElement.querySelector("input[type='password'], input[type='text']");
+      if (input) {
         if (input.type === "password") {
           input.type = "text";
           btn.textContent = "Hide";

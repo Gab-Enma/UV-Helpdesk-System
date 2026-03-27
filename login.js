@@ -80,19 +80,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add toggle password functionality
   const togglePasswordBtns = document.querySelectorAll(".toggle-password");
+  console.log("Found toggle buttons:", togglePasswordBtns.length);
+  
   togglePasswordBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      console.log("Toggle button clicked");
+      
       const input = btn.parentElement.querySelector(
         "input[type='password'], input[type='text']",
       );
+      console.log("Found input:", input);
+      
       if (input) {
         if (input.type === "password") {
           input.type = "text";
           btn.textContent = "Hide";
+          console.log("Password shown");
         } else {
           input.type = "password";
           btn.textContent = "Show";
+          console.log("Password hidden");
         }
       }
     });

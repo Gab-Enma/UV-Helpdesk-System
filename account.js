@@ -41,8 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (form) {
     form.querySelector("input[name='name']").value = user.name || "";
     form.querySelector("input[name='email']").value = user.email || "";
-    form.querySelector("input[name='username']").value = user.username || "";
-    if (displayUsername) displayUsername.textContent = user.username || "";
+    if (displayUsername) displayUsername.textContent = user.name || "";
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -55,9 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const name = form.querySelector("input[name='name']").value.trim();
       const email = form.querySelector("input[name='email']").value.trim();
-      const username = form
-        .querySelector("input[name='username']")
-        .value.trim();
       const currentPassword = form.querySelector(
         "input[name='currentPassword']",
       ).value;
@@ -66,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "input[name='confirmPassword']",
       ).value;
 
-      if (!name || !email || !username) {
+      if (!name || !email) {
         alert("Please fill in all required fields.");
         return;
       }
@@ -108,14 +104,14 @@ document.addEventListener("DOMContentLoaded", function () {
         ...users[idx],
         name,
         email,
-        username,
+        username: name,
         password: updatedPassword,
       };
       users[idx] = updatedUser;
       setUsers(users);
       setCurrentUser(updatedUser);
       if (displayUsername)
-        displayUsername.textContent = updatedUser.username || "";
+        displayUsername.textContent = updatedUser.name || "";
 
       alert("Account settings saved.");
       // Clear password fields

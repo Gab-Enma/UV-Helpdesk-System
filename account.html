@@ -22,6 +22,7 @@
       <section class="panel">
         <h1>My Account</h1>
         <p>Update your personal details and change your password.</p>
+        <p>Display username: <strong id="display-username"></strong></p>
 
         <form class="account-form" action="#" method="post">
           <label>
@@ -40,16 +41,6 @@
               type="email"
               name="email"
               placeholder="you@example.com"
-              required
-            />
-          </label>
-
-          <label>
-            Username
-            <input
-              type="text"
-              name="username"
-              placeholder="Your username"
               required
             />
           </label>
@@ -74,7 +65,9 @@
           </fieldset>
 
           <div class="form-actions">
-            <button type="submit" class="button">Update Account</button>
+            <button id="update-account-btn" type="submit" class="button">
+              Update Account
+            </button>
             <a href="dashboard.html" class="button button--secondary"
               >Back to Dashboard</a
             >

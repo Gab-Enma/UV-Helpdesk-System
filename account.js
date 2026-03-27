@@ -39,19 +39,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      const name = form.querySelector("input[name='name']").value;
-      const email = form.querySelector("input[name='email']").value;
-      const username = form.querySelector("input[name='username']").value;
+      const name = form.querySelector("input[name='name']").value.trim();
+      const email = form.querySelector("input[name='email']").value.trim();
+      const username = form.querySelector("input[name='username']").value.trim();
+      const currentPassword = form.querySelector("input[name='currentPassword']").value;
+      const newPassword = form.querySelector("input[name='newPassword']").value;
+      const confirmPassword = form.querySelector("input[name='confirmPassword']").value;
+
+      if (!name || !email || !username) {
+        alert("Please fill in all required fields.");
+        return;
+      }
 
       const users = getUsers();
       const idx = users.findIndex((u) => u.email === user.email);
-      if (idx !== -1) {
-        users[idx] = { ...users[idx], name, email, username };
-        setUsers(users);
-        setCurrentUser(users[idx]);
+      if (idx === -1) {
+        alert("User not found.");
+        return;
       }
 
+      // Check if email is already taken by another user
+      const emailTaken = users.some((u, i) => i !== idx && u.email === email);
+      if (emailTaken) {
+        alert("Email is already in use by another account.");
+        return;
+      }
+
+      // Handle password change
+      let updatedPassword = user.password;
+      if (currentPassword || newPassword || confirmPassword) {
+        if (currentPassword !== user.password) {
+          alert("Current password is incorrect.");
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          alert("New passwords do not match.");
+          return;
+        }
+        if (!newPassword) {
+          alert("Please enter a new password.");
+          return;
+        }
+        updatedPassword = newPassword;
+      }
+
+      // Update user
+      const updatedUser = { ...users[idx], name, email, username, password: updatedPassword };
+      users[idx] = updatedUser;
+      setUsers(users);
+      setCurrentUser(updatedUser);
+
       alert("Account settings saved.");
+      // Clear password fields
+      form.querySelector("input[name='currentPassword']").value = "";
+      form.querySelector("input[name='newPassword']").value = "";
+      form.querySelector("input[name='confirmPassword']").value = "";
     });
   }
 

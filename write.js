@@ -46,6 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+  if (!user) {
+    alert("You must be logged in to submit a ticket.");
+    window.location.href = "login.html";
+    return;
+  }
+
   const form = document.querySelector(".ticket-form");
   if (form) {
     form.addEventListener("submit", async function (event) {
@@ -70,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         await apiRequest("/tickets", "POST", ticket, token);
         alert("Ticket submitted and routed to " + category + " dashboard.");
         form.reset();
-        window.location.href = redirectForCategory(category);
+        window.location.href = redirectForUser();
         return;
       } catch (apiError) {
         console.warn("API store unavailable, using local fallback:", apiError);
@@ -94,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       alert("Ticket submitted and routed to " + category + " dashboard.");
       form.reset();
-      window.location.href = redirectForCategory(category);
+      window.location.href = redirectForUser();
     });
   }
 

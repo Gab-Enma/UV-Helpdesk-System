@@ -24,6 +24,23 @@ function updateTicketStatusInLocal(ticketId, status) {
   return true;
 }
 
+function updateTicketCommentsInLocal(ticketId, comment) {
+  const tickets = getTickets();
+  const idx = tickets.findIndex(
+    (t) => String(t.id || t._id) === String(ticketId),
+  );
+  if (idx < 0) return false;
+  if (!tickets[idx].comments) tickets[idx].comments = [];
+  tickets[idx].comments.push({
+    text: comment,
+    author: getCurrentUser().name || getCurrentUser().email,
+    createdAt: new Date().toISOString(),
+  });
+  tickets[idx].updatedAt = new Date().toISOString();
+  setTickets(tickets);
+  return true;
+}
+
 async function apiRequest(path, method = "GET", body = null, token = null) {
   const opts = {
     method,
@@ -148,6 +165,96 @@ async function renderTicketsForCategory(category) {
       statusWrapper.appendChild(statusLabel);
       statusWrapper.appendChild(statusSelect);
       details.appendChild(statusWrapper);
+
+      // Comments section
+      const commentsSection = document.createElement("div");
+      commentsSection.style.marginTop = "1rem";
+
+      const commentsTitle = document.createElement("h4");
+      commentsTitle.textContent = "Comments";
+      commentsTitle.style.margin = "0 0 0.5rem 0";
+      commentsSection.appendChild(commentsTitle);
+
+      // Display existing comments
+      if (t.comments && t.comments.length > 0) {
+        t.comments.forEach((c) => {
+          const commentDiv = document.createElement("div");
+          commentDiv.style.border = "1px solid var(--border)";
+          commentDiv.style.borderRadius = "5px";
+          commentDiv.style.padding = "0.5rem";
+          commentDiv.style.marginBottom = "0.5rem";
+          commentDiv.innerHTML = `<strong>${c.author}</strong> (${new Date(
+            c.createdAt,
+          ).toLocaleString()}): ${c.text}`;
+          commentsSection.appendChild(commentDiv);
+        });
+      } else {
+        const noComments = document.createElement("p");
+        noComments.textContent = "No comments yet.";
+        noComments.style.color = "var(--muted)";
+        commentsSection.appendChild(noComments);
+      }
+
+      // Add comment input
+      const commentWrapper = document.createElement("div");
+      commentWrapper.style.display = "flex";
+      commentWrapper.style.gap = "0.5rem";
+      commentWrapper.style.alignItems = "flex-end";
+
+      const commentTextarea = document.createElement("textarea");
+      commentTextarea.placeholder = "Add a comment...";
+      commentTextarea.style.flex = "1";
+      commentTextarea.style.minHeight = "60px";
+
+      const addCommentBtn = document.createElement("button");
+      addCommentBtn.textContent = "Add Comment";
+      addCommentBtn.style.padding = "0.5rem 1rem";
+      addCommentBtn.style.backgroundColor = "var(--primary)";
+      addCommentBtn.style.color = "white";
+      addCommentBtn.style.border = "none";
+      addCommentBtn.style.borderRadius = "5px";
+      addCommentBtn.style.cursor = "pointer";
+
+      commentWrapper.appendChild(commentTextarea);
+      commentWrapper.appendChild(addCommentBtn);
+      commentsSection.appendChild(commentWrapper);
+      details.appendChild(commentsSection);
+
+      // Event listener for add comment
+      addCommentBtn.addEventListener("click", async () => {
+        const commentText = commentTextarea.value.trim();
+        if (!commentText) return;
+        const ticketId = t.id || t._id;
+
+        try {
+          await apiRequest(
+            `/tickets/${ticketId}/comments`,
+            "POST",
+            { text: commentText },
+            token,
+          );
+        } catch (apiError) {
+          console.warn(
+            "API comment add failed, using local fallback:",
+            apiError,
+          );
+        }
+
+        if (updateTicketCommentsInLocal(ticketId, commentText)) {
+          // Add new comment to display
+          const newCommentDiv = document.createElement("div");
+          newCommentDiv.style.border = "1px solid var(--border)";
+          newCommentDiv.style.borderRadius = "5px";
+          newCommentDiv.style.padding = "0.5rem";
+          newCommentDiv.style.marginBottom = "0.5rem";
+          newCommentDiv.innerHTML = `<strong>${
+            user.name || user.email
+          }</strong> (${new Date().toLocaleString()}): ${commentText}`;
+          commentsSection.insertBefore(newCommentDiv, commentWrapper);
+          commentTextarea.value = "";
+          alert("Comment added.");
+        }
+      });
 
       statusSelect.addEventListener("change", async (event) => {
         const newStatus = event.target.value;

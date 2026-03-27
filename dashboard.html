@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticketing System - Dashboard</title>
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Ticketing System</div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav__link nav__link--active"
+          >Dashboard</a
+        >
+        <a href="write.html" class="nav__link">Write</a>
+        <a href="account.html" class="nav__link">Account</a>
+        <a href="login.html" class="nav__link nav__link--cta">Login / Signup</a>
+      </nav>
+    </header>
+
+    <main class="page page--dashboard">
+      <section class="panel">
+        <h1>Dashboard</h1>
+        <p>Here's an overview of your open tickets and recent activity.</p>
+
+        <div class="cards">
+          <div class="card">
+            <h2>Open Tickets</h2>
+            <p class="stat">0</p>
+            <p class="card__hint">No open tickets yet</p>
+          </div>
+          <div class="card">
+            <h2>In Progress</h2>
+            <p class="stat">0</p>
+            <p class="card__hint">No tickets in progress</p>
+          </div>
+          <div class="card">
+            <h2>Resolved</h2>
+            <p class="stat">0</p>
+            <p class="card__hint">No resolved tickets yet</p>
+          </div>
+        </div>
+
+        <section class="recent">
+          <h2>Recent Activity</h2>
+          <p class="muted">
+            No activity yet. Create a ticket to see updates here.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; <span id="year"></span> Ticketing System</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+        if (!user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        function redirectForRole(role) {
+          if (role === "accounting") return "dashboard-accounting.html";
+          if (role === "registrar") return "dashboard-registrar.html";
+          if (role === "faculty") return "dashboard-faculty.html";
+          if (role === "student") return "dashboard-student.html";
+          return "dashboard.html";
+        }
+
+        const targetDashboard = redirectForRole(user.role);
+        if (targetDashboard !== "dashboard.html") {
+          window.location.href = targetDashboard;
+        }
+      });
+    </script>
+    <script src="auth.js"></script>
+  </body>
+</html>

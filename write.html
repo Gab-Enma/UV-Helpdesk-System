@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticketing System - Write Ticket</title>
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/write.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Ticketing System</div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav__link">Dashboard</a>
+        <a href="write.html" class="nav__link nav__link--active">Write</a>
+        <a href="account.html" class="nav__link">Account</a>
+        <a href="login.html" class="nav__link nav__link--cta">Login / Signup</a>
+      </nav>
+    </header>
+
+    <main class="page page--write">
+      <section class="panel">
+        <h1>Create a New Ticket</h1>
+        <p>Use this form to submit a new ticket to the system.</p>
+
+        <form class="ticket-form" action="#" method="post">
+          <label>
+            Title
+            <input
+              type="text"
+              name="title"
+              placeholder="Summarize the issue"
+              required
+            />
+          </label>
+
+          <label>
+            Description
+            <textarea
+              name="description"
+              rows="6"
+              placeholder="Describe the problem in detail"
+              required
+            ></textarea>
+          </label>
+
+          <div class="form-row">
+            <label>
+              Priority
+              <select name="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </label>
+
+            <label>
+              Category
+              <select name="category">
+                <option value="accounting" selected>Accounting</option>
+                <option value="registrar">Registrar</option>
+                <option value="faculty">Faculty</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Attachments (optional)
+            <input type="file" name="attachments" multiple />
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="button">Submit Ticket</button>
+            <a href="dashboard.html" class="button button--secondary"
+              >Back to Dashboard</a
+            >
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; <span id="year"></span> Ticketing System</p>
+    </footer>
+
+    <script src="write.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>

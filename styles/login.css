@@ -1,0 +1,32 @@
+.panel--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.panel__side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.panel__side--alt {
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.auth-form {
+  margin-top: 1.2rem;
+}
+
+.form-actions {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 840px) {
+  .panel--split {
+    grid-template-columns: 1fr;
+  }
+}

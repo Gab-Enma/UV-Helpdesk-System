@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticketing System - Account</title>
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/account.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Ticketing System</div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav__link">Dashboard</a>
+        <a href="write.html" class="nav__link">Write</a>
+        <a href="account.html" class="nav__link nav__link--active">Account</a>
+        <a href="login.html" class="nav__link nav__link--cta">Login / Signup</a>
+      </nav>
+    </header>
+
+    <main class="page page--account">
+      <section class="panel">
+        <h1>My Account</h1>
+        <p>Update your personal details and change your password.</p>
+
+        <form class="account-form" action="#" method="post">
+          <label>
+            Full Name
+            <input
+              type="text"
+              name="name"
+              placeholder="Your full name"
+              required
+            />
+          </label>
+
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+
+          <label>
+            Username
+            <input
+              type="text"
+              name="username"
+              placeholder="Your username"
+              required
+            />
+          </label>
+
+          <fieldset class="password-fieldset">
+            <legend>Change Password</legend>
+
+            <label>
+              Current Password
+              <input type="password" name="currentPassword" />
+            </label>
+
+            <label>
+              New Password
+              <input type="password" name="newPassword" />
+            </label>
+
+            <label>
+              Confirm New Password
+              <input type="password" name="confirmPassword" />
+            </label>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" class="button">Update Account</button>
+            <a href="dashboard.html" class="button button--secondary"
+              >Back to Dashboard</a
+            >
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; <span id="year"></span> Ticketing System</p>
+    </footer>
+
+    <script src="account.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>

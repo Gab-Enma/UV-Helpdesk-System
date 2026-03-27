@@ -1,0 +1,57 @@
+.hero {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  margin: 1rem auto 1.75rem;
+  max-width: 640px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hero__actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature {
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.feature h2 {
+  margin-top: 0;
+}
+
+.feature p {
+  color: var(--muted);
+  margin: 0.75rem 0 1.2rem;
+}
+
+.link {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.link:hover {
+  text-decoration: underline;
+}

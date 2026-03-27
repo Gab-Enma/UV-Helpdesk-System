@@ -1,0 +1,56 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.75rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.stat {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  color: var(--primary);
+}
+
+.card__hint {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.recent {
+  margin-top: 2.25rem;
+}
+
+.recent h2 {
+  margin-top: 0;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.activity-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticketing System - Home</title>
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/index.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Ticketing System</div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav__link">Dashboard</a>
+        <a href="write.html" class="nav__link">Write</a>
+        <a href="account.html" class="nav__link">Account</a>
+        <a href="login.html" class="nav__link nav__link--cta">Login / Signup</a>
+      </nav>
+    </header>
+
+    <main class="page page--home">
+      <section class="hero">
+        <h1>Welcome to UV Helpdesk & Support</h1>
+        <p>
+          Track issues, write new tickets, and manage your account all in one
+          place.
+        </p>
+        <div class="hero__actions">
+          <a href="dashboard.html" class="button">Go to Dashboard</a>
+          <a href="write.html" class="button button--secondary"
+            >Create Ticket</a
+          >
+        </div>
+      </section>
+
+      <section class="features">
+        <article class="feature">
+          <h2>Dashboard</h2>
+          <p>
+            See a quick overview of your open tickets, recent activity, and
+            priority items.
+          </p>
+          <a href="dashboard.html" class="link">View dashboard &rarr;</a>
+        </article>
+
+        <article class="feature">
+          <h2>Write</h2>
+          <p>
+            Create a new ticket, add attachments, and set priority so your team
+            can take action.
+          </p>
+          <a href="write.html" class="link">Start writing a ticket &rarr;</a>
+        </article>
+
+        <article class="feature">
+          <h2>Account</h2>
+          <p>
+            Update your profile, change your password, and manage your
+            preferences.
+          </p>
+          <a href="account.html" class="link">Manage account &rarr;</a>
+        </article>
+
+        <article class="feature">
+          <h2>Login / Signup</h2>
+          <p>
+            Sign in to continue or create a new account to start tracking
+            tickets.
+          </p>
+          <a href="login.html" class="link">Login / Signup &rarr;</a>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        &copy; <span id="year"></span> Ticketing System. All rights reserved.
+      </p>
+    </footer>
+
+    <script src="index.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>

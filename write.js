@@ -1,4 +1,4 @@
-const API_BASE = "https://your-deployed-backend-url/api";
+const API_BASE = "http://localhost:3000/api";
 
 function getTickets() {
   return JSON.parse(localStorage.getItem("tickets") || "[]");

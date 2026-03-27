@@ -110,8 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       users[idx] = updatedUser;
       setUsers(users);
       setCurrentUser(updatedUser);
-      if (displayUsername)
-        displayUsername.textContent = updatedUser.name || "";
+      if (displayUsername) displayUsername.textContent = updatedUser.name || "";
 
       alert("Account settings saved.");
       // Clear password fields

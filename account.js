@@ -32,21 +32,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add toggle password functionality
   const togglePasswordBtns = document.querySelectorAll(".toggle-password");
   console.log("Found toggle buttons:", togglePasswordBtns.length);
-  
+
   togglePasswordBtns.forEach((btn) => {
-    btn.addEventListener("click", function(e) {
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
       console.log("Toggle button clicked");
-      
+
       // Find parent div that contains both input and button
       const parentDiv = btn.closest("div[style*='position']");
       console.log("Parent div:", parentDiv);
-      
+
       if (parentDiv) {
         const input = parentDiv.querySelector("input");
         console.log("Found input:", input, "Type:", input?.type);
-        
+
         if (input) {
           if (input.type === "password") {
             input.type = "text";

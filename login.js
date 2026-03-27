@@ -80,16 +80,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add toggle password functionality
   const togglePasswordBtns = document.querySelectorAll(".toggle-password");
-  
+
   togglePasswordBtns.forEach((btn) => {
-    btn.addEventListener("click", function(e) {
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      
+
       // Navigate up to find the input sibling
       const wrapper = btn.parentElement; // The div with position: relative
-      const input = wrapper.querySelector("input[type='password'], input[type='text']");
-      
+      const input = wrapper.querySelector(
+        "input[type='password'], input[type='text']",
+      );
+
       if (input) {
         if (input.type === "password") {
           input.type = "text";

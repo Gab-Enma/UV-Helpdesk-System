@@ -90,7 +90,7 @@ app.get("/api/users/me", authenticate, (req, res) => {
   });
 });
 
-app.post("/api/tickets", (req, res) => {
+app.post("/api/tickets", authenticate, (req, res) => {
   const { title, description, priority, category } = req.body;
   if (!["accounting", "registrar", "faculty"].includes(category)) {
     return res.status(400).json({ message: "Invalid category" });
@@ -103,7 +103,8 @@ app.post("/api/tickets", (req, res) => {
     category,
     status: "Open",
     createdAt: new Date().toISOString(),
-    submitterEmail: req.user ? req.user.email : "anonymous",
+    owner: req.user.id,
+    submitterEmail: req.user.email,
     comments: [],
   };
   tickets.push(ticket);

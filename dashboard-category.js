@@ -66,7 +66,7 @@ function logout() {
 }
 
 async function renderTicketsForCategory(category) {
-  let tickets = getTickets().filter((t) => t.category === category);
+  let tickets = [];
 
   const token = localStorage.getItem("authToken");
   if (token) {
@@ -78,8 +78,12 @@ async function renderTicketsForCategory(category) {
         token,
       );
     } catch (apiError) {
-      console.warn("API ticket fetch failed, using local fallback:", apiError);
+      console.warn("API ticket fetch failed, trying local fallback:", apiError);
+      tickets = getTickets().filter((t) => t.category === category);
     }
+  } else {
+    console.warn("No auth token, using local tickets");
+    tickets = getTickets().filter((t) => t.category === category);
   }
 
   const counts = {

@@ -73,41 +73,56 @@ document.addEventListener("DOMContentLoaded", function () {
       const token = localStorage.getItem("authToken");
       const user = JSON.parse(localStorage.getItem("currentUser") || "null");
 
-      const newTicket = {
-        id: Date.now(),
+      const ticketData = {
         title,
         description,
         priority,
         category,
-        status: "Open",
-        createdAt: new Date().toISOString(),
-        submitterEmail: user ? user.email : "",
       };
 
-      // Persist in local storage so dashboards immediately reflect the ticket
-      const tickets = getTickets();
-      tickets.push(newTicket);
-      setTickets(tickets);
+      let ticketSubmitted = false;
 
       if (token) {
         try {
-          await apiRequest(
-            "/tickets",
-            "POST",
-            {
-              title,
-              description,
-              priority,
-              category,
-            },
-            token,
-          );
+          const apiTicket = await apiRequest("/tickets", "POST", ticketData, token);
+          // If API succeeds, use the returned ticket
+          const newTicket = {
+            id: apiTicket.id,
+            title: apiTicket.title,
+            description: apiTicket.description,
+            priority: apiTicket.priority,
+            category: apiTicket.category,
+            status: apiTicket.status,
+            createdAt: apiTicket.createdAt,
+            submitterEmail: apiTicket.submitterEmail,
+            comments: apiTicket.comments || [],
+          };
+          // Save to local for consistency
+          const tickets = getTickets();
+          tickets.push(newTicket);
+          setTickets(tickets);
+          ticketSubmitted = true;
         } catch (apiError) {
-          console.warn(
-            "API store unavailable, using local fallback:",
-            apiError,
-          );
+          console.warn("API submission failed, falling back to local:", apiError);
         }
+      }
+
+      if (!ticketSubmitted) {
+        // Local fallback
+        const newTicket = {
+          id: Date.now(),
+          title,
+          description,
+          priority,
+          category,
+          status: "Open",
+          createdAt: new Date().toISOString(),
+          submitterEmail: user ? user.email : "",
+          comments: [],
+        };
+        const tickets = getTickets();
+        tickets.push(newTicket);
+        setTickets(tickets);
       }
 
       alert("Ticket submitted and routed to " + category + " dashboard.");

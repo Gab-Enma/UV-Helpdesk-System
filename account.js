@@ -10,6 +10,10 @@ function getUsers() {
   return JSON.parse(localStorage.getItem("users") || "[]");
 }
 
+function setUsers(users) {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
 function redirectForUser() {
   const user = getCurrentUser();
   if (!user) return "dashboard.html";
@@ -32,19 +36,35 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const form = document.querySelector(".account-form");
+  const displayUsername = document.getElementById("display-username");
+
   if (form) {
     form.querySelector("input[name='name']").value = user.name || "";
     form.querySelector("input[name='email']").value = user.email || "";
     form.querySelector("input[name='username']").value = user.username || "";
+    if (displayUsername) displayUsername.textContent = user.username || "";
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      console.log("account form submitted");
+
+      const updateBtn = document.getElementById("update-account-btn");
+      if (!updateBtn) {
+        console.error("Update button not found");
+      }
+
       const name = form.querySelector("input[name='name']").value.trim();
       const email = form.querySelector("input[name='email']").value.trim();
-      const username = form.querySelector("input[name='username']").value.trim();
-      const currentPassword = form.querySelector("input[name='currentPassword']").value;
+      const username = form
+        .querySelector("input[name='username']")
+        .value.trim();
+      const currentPassword = form.querySelector(
+        "input[name='currentPassword']",
+      ).value;
       const newPassword = form.querySelector("input[name='newPassword']").value;
-      const confirmPassword = form.querySelector("input[name='confirmPassword']").value;
+      const confirmPassword = form.querySelector(
+        "input[name='confirmPassword']",
+      ).value;
 
       if (!name || !email || !username) {
         alert("Please fill in all required fields.");
@@ -84,10 +104,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Update user
-      const updatedUser = { ...users[idx], name, email, username, password: updatedPassword };
+      const updatedUser = {
+        ...users[idx],
+        name,
+        email,
+        username,
+        password: updatedPassword,
+      };
       users[idx] = updatedUser;
       setUsers(users);
       setCurrentUser(updatedUser);
+      if (displayUsername)
+        displayUsername.textContent = updatedUser.username || "";
 
       alert("Account settings saved.");
       // Clear password fields

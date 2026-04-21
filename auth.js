@@ -31,6 +31,23 @@ function updateNavbar() {
 
     loginLink.parentNode.replaceChild(logoutLink, loginLink);
   }
+
+  // Hide/show links based on login status
+  const dashboardLink = nav.querySelector('a[href="dashboard.html"]');
+  const writeLink = nav.querySelector('a[href="write.html"]');
+  const accountLink = nav.querySelector('a[href="account.html"]');
+
+  if (!user) {
+    // Hide protected links when not logged in
+    if (dashboardLink) dashboardLink.style.display = "none";
+    if (writeLink) writeLink.style.display = "none";
+    if (accountLink) accountLink.style.display = "none";
+  } else {
+    // Show protected links when logged in
+    if (dashboardLink) dashboardLink.style.display = "";
+    if (writeLink) writeLink.style.display = "";
+    if (accountLink) accountLink.style.display = "";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

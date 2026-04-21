@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ticketing System - Login / Signup</title>
+    <title>Ticketing System - Signup</title>
     <link rel="stylesheet" href="styles/common.css" />
     <link rel="stylesheet" href="styles/login.css" />
   </head>
@@ -14,18 +14,25 @@
         <a href="dashboard.html" class="nav__link">Dashboard</a>
         <a href="write.html" class="nav__link">Write</a>
         <a href="account.html" class="nav__link">Account</a>
-        <a href="login.html" class="nav__link nav__link--active">Login</a>
-        <a href="signup.html" class="nav__link">Signup</a>
+        <a href="login.html" class="nav__link">Login</a>
+        <a href="signup.html" class="nav__link nav__link--active nav__link--cta"
+          >Signup</a
+        >
       </nav>
     </header>
 
     <main class="page page--login">
       <section class="panel">
         <div class="panel__side">
-          <h1>Login</h1>
-          <p>Already have an account? Sign in to continue.</p>
+          <h1>Signup</h1>
+          <p>Create a new account to start tracking tickets immediately.</p>
 
-          <form id="login-form" class="auth-form" action="#" method="post">
+          <form id="signup-form" class="auth-form" action="#" method="post">
+            <label>
+              Full Name
+              <input type="text" name="name" placeholder="Your name" required />
+            </label>
+
             <label>
               Email
               <input
@@ -44,7 +51,7 @@
                 <input
                   type="password"
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                   required
                 />
                 <button
@@ -66,12 +73,12 @@
             </label>
 
             <div class="form-actions">
-              <button type="submit" class="button">Login</button>
+              <button type="submit" class="button">Sign Up</button>
             </div>
           </form>
 
           <p style="margin-top: 1rem; text-align: center">
-            Don't have an account? <a href="signup.html">Sign up</a>
+            Already have an account? <a href="login.html">Login</a>
           </p>
         </div>
       </section>

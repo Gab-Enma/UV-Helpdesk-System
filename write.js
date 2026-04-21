@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .value.trim();
       const priority = form.querySelector("select[name='priority']").value;
       const category = form.querySelector("select[name='category']").value;
+      const attachmentInput = form.querySelector("input[name='attachments']");
 
       if (!title || !description) {
         alert("Please fill all required fields.");
@@ -72,6 +73,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const token = localStorage.getItem("authToken");
       const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+      // Process attachments
+      const attachments = [];
+      if (attachmentInput && attachmentInput.files.length > 0) {
+        for (let file of attachmentInput.files) {
+          const reader = new FileReader();
+          await new Promise((resolve) => {
+            reader.onload = (e) => {
+              attachments.push({
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                data: e.target.result, // Base64 encoded file data
+              });
+              resolve();
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+      }
 
       const newTicket = {
         id: Date.now(),
@@ -83,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         createdAt: new Date().toISOString(),
         submitterEmail: user ? user.email : "",
         comments: [],
+        attachments: attachments,
       };
 
       // Persist in local storage first
@@ -101,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
               description,
               priority,
               category,
+              attachments: attachments,
             },
             token,
           );

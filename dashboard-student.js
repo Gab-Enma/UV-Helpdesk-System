@@ -130,6 +130,60 @@ async function renderTicketsForStudent() {
     }
     details.appendChild(commentsContainer);
 
+    // Add attachments section if attachments exist
+    if (t.attachments && t.attachments.length > 0) {
+      const attachmentsDiv = document.createElement("div");
+      attachmentsDiv.style.marginTop = "1rem";
+      attachmentsDiv.style.padding = "0.5rem";
+      attachmentsDiv.style.backgroundColor = "var(--bg)";
+      attachmentsDiv.style.borderRadius = "5px";
+
+      const attachmentsTitle = document.createElement("h4");
+      attachmentsTitle.textContent = `My Attachments (${t.attachments.length})`;
+      attachmentsTitle.style.margin = "0 0 0.5rem 0";
+      attachmentsDiv.appendChild(attachmentsTitle);
+
+      t.attachments.forEach((att, idx) => {
+        const attItem = document.createElement("div");
+        attItem.style.display = "flex";
+        attItem.style.justifyContent = "space-between";
+        attItem.style.alignItems = "center";
+        attItem.style.padding = "0.5rem";
+        attItem.style.borderBottom = "1px solid var(--border)";
+
+        const attInfo = document.createElement("div");
+        attInfo.innerHTML = `
+          <strong>${att.name}</strong><br>
+          <small style="color: var(--muted);">${(att.size / 1024).toFixed(2)} KB · ${att.type}</small>
+        `;
+        attItem.appendChild(attInfo);
+
+        const downloadBtn = document.createElement("button");
+        downloadBtn.textContent = "Download";
+        downloadBtn.style.padding = "0.4rem 0.8rem";
+        downloadBtn.style.backgroundColor = "var(--primary)";
+        downloadBtn.style.color = "white";
+        downloadBtn.style.border = "none";
+        downloadBtn.style.borderRadius = "4px";
+        downloadBtn.style.cursor = "pointer";
+        downloadBtn.style.fontSize = "0.9rem";
+
+        downloadBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const link = document.createElement("a");
+          link.href = att.data;
+          link.download = att.name;
+          link.click();
+        });
+
+        attItem.appendChild(downloadBtn);
+        attItem.style.borderBottom = "";
+        attachmentsDiv.appendChild(attItem);
+      });
+
+      details.appendChild(attachmentsDiv);
+    }
+
     title.addEventListener("click", () => {
       details.style.display =
         details.style.display === "none" ? "block" : "none";

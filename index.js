@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Hide protected features if user is not logged in
   const user = JSON.parse(localStorage.getItem("currentUser") || "null");
-  const protectedFeatures = document.querySelectorAll('[data-protected="true"]');
+  const protectedFeatures = document.querySelectorAll(
+    '[data-protected="true"]',
+  );
   if (!user) {
     protectedFeatures.forEach((feature) => {
       feature.style.display = "none";

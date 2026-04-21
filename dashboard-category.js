@@ -328,8 +328,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const panelHeading = document.querySelector(".panel h1");
 
   if (!user) {
-    alert("You must be logged in to view the dashboard.");
-    window.location.href = "login.html";
+    // Hide dashboard content for unauthenticated users
+    const panel = document.querySelector(".panel");
+    if (panel) panel.style.display = "none";
+
+    // Show login prompt
+    const main = document.querySelector("main");
+    const loginPrompt = document.createElement("section");
+    loginPrompt.className = "panel";
+    loginPrompt.innerHTML = `
+      <h1>Access Restricted</h1>
+      <p>Please <a href="login.html">log in</a> to view your dashboard.</p>
+    `;
+    main.appendChild(loginPrompt);
     return;
   }
 

@@ -17,6 +17,12 @@ function getCurrentUser() {
 function ensureDefaultAccounts() {
   const defaultUsers = [
     {
+      email: "masterkey@uv.edu.ph",
+      password: "masterkey123",
+      role: "masterkey",
+      name: "Master Administrator",
+    },
+    {
       email: "accounting@uv.edu.ph",
       password: "accounting123",
       role: "accounting",
@@ -47,6 +53,7 @@ function ensureDefaultAccounts() {
 const API_BASE = "http://localhost:3000/api";
 
 function redirectForRole(role) {
+  if (role === "masterkey") return "dashboard-masterkey.html";
   if (role === "accounting") return "dashboard-accounting.html";
   if (role === "registrar") return "dashboard-registrar.html";
   if (role === "faculty") return "dashboard-faculty.html";

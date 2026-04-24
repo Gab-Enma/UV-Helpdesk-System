@@ -18,6 +18,7 @@ function redirectForUser() {
   const user = getCurrentUser();
   if (!user) return "dashboard.html";
 
+  if (user.role === "masterkey") return "dashboard-masterkey.html";
   if (user.role === "accounting") return "dashboard-accounting.html";
   if (user.role === "registrar") return "dashboard-registrar.html";
   if (user.role === "faculty") return "dashboard-faculty.html";

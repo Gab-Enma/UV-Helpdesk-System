@@ -6,25 +6,33 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(".")); // Serve static files from current directory
 
 // In-memory data store (mock persistence)
 const users = [
   {
     id: 1,
+    name: "Master Administrator",
+    email: "masterkey@uv.edu.ph",
+    password: "masterkey123",
+    role: "masterkey",
+  },
+  {
+    id: 2,
     name: "Accounting Team",
     email: "accounting@uv.edu.ph",
     password: "accounting123",
     role: "accounting",
   },
   {
-    id: 2,
+    id: 3,
     name: "Registrar Team",
     email: "registrar@uv.edu.ph",
     password: "registrar123",
     role: "registrar",
   },
   {
-    id: 3,
+    id: 4,
     name: "Faculty Team",
     email: "faculty@uv.edu.ph",
     password: "faculty123",
@@ -64,7 +72,8 @@ app.post("/api/login", (req, res) => {
 
 app.post("/api/signup", (req, res) => {
   const { name, email, password, role } = req.body;
-  if (!["accounting", "registrar", "faculty"].includes(role)) {
+  // Masterkey cannot be created via signup - only exists by default
+  if (!["accounting", "registrar", "faculty", "student"].includes(role)) {
     return res.status(400).json({ message: "Invalid role" });
   }
   if (users.some((u) => u.email === email)) {
@@ -175,6 +184,107 @@ app.get("/api/tickets", authenticate, (req, res) => {
   return res
     .status(400)
     .json({ message: "Category or submitter parameter required" });
+});
+
+// ============ MASTERKEY ADMIN ENDPOINTS ============
+// Middleware to check if user is masterkey
+function authenticateAdmin(req, res, next) {
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
+  if (!token || !sessions.has(token)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const user = sessions.get(token);
+  if (user.role !== "masterkey") {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  req.user = user;
+  next();
+}
+
+// Get all users
+app.get("/api/admin/users", authenticateAdmin, (req, res) => {
+  const userList = users.map((u) => ({
+    id: u.id,
+    name: u.name,
+    email: u.email,
+    role: u.role,
+  }));
+  res.json(userList);
+});
+
+// Get user by ID
+app.get("/api/admin/users/:userId", authenticateAdmin, (req, res) => {
+  const userId = Number(req.params.userId);
+  const user = users.find((u) => u.id === userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  });
+});
+
+// Update user
+app.put("/api/admin/users/:userId", authenticateAdmin, (req, res) => {
+  const userId = Number(req.params.userId);
+  const user = users.find((u) => u.id === userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Prevent masterkey from being modified
+  if (user.role === "masterkey") {
+    return res.status(403).json({ message: "Cannot modify masterkey account" });
+  }
+
+  const { name, email, role, password } = req.body;
+
+  if (name || email || role || password) {
+    if (name) user.name = name;
+    if (email && !users.some((u) => u.id !== userId && u.email === email)) {
+      user.email = email;
+    } else if (email) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+    if (
+      role &&
+      ["accounting", "registrar", "faculty", "student"].includes(role)
+    ) {
+      user.role = role;
+    }
+    if (password) user.password = password;
+  }
+
+  res.json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  });
+});
+
+// Delete user
+app.delete("/api/admin/users/:userId", authenticateAdmin, (req, res) => {
+  const userId = Number(req.params.userId);
+  const userIndex = users.findIndex((u) => u.id === userId);
+
+  if (userIndex === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const user = users[userIndex];
+
+  // Prevent masterkey from being deleted
+  if (user.role === "masterkey") {
+    return res.status(403).json({ message: "Cannot delete masterkey account" });
+  }
+
+  users.splice(userIndex, 1);
+
+  res.json({ message: "User deleted successfully" });
 });
 
 app.listen(port, () => {

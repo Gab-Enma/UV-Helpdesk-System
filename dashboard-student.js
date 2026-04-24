@@ -244,9 +244,21 @@ document.addEventListener("DOMContentLoaded", function () {
   const page = document.querySelector(".page");
 
   if (toggleBtn) {
+    // Restore sidebar state from localStorage
+    const isSidebarHidden = localStorage.getItem("sidebarHidden") === "true";
+    if (isSidebarHidden) {
+      sidebar.classList.add("sidebar--hidden");
+      page.classList.add("page--sidebar-hidden");
+    }
+
     toggleBtn.addEventListener("click", function () {
       sidebar.classList.toggle("sidebar--hidden");
       page.classList.toggle("page--sidebar-hidden");
+      // Save state to localStorage
+      localStorage.setItem(
+        "sidebarHidden",
+        sidebar.classList.contains("sidebar--hidden"),
+      );
     });
   }
 

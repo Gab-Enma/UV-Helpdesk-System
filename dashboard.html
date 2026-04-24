@@ -10,7 +10,7 @@
   <body>
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
-      <a href="index.html" class="sidebar__brand">Ticketing System</a>
+      <div class="sidebar__brand">Ticketing System</div>
       <nav class="sidebar__nav">
         <a href="dashboard.html" class="sidebar__link sidebar__link--active"
           >Dashboard</a
@@ -46,7 +46,7 @@
 
     <!-- Top Navigation -->
     <header class="topbar">
-      <a href="index.html" class="brand">Ticketing System</a>
+      <div class="brand">Ticketing System</div>
       <nav class="nav">
         <a href="dashboard.html" class="nav__link nav__link--active"
           >Dashboard</a
@@ -119,9 +119,22 @@
         const toggleBtn = document.getElementById("sidebar-toggle");
         const page = document.querySelector(".page");
 
+        // Restore sidebar state from localStorage
+        const isSidebarHidden =
+          localStorage.getItem("sidebarHidden") === "true";
+        if (isSidebarHidden) {
+          sidebar.classList.add("sidebar--hidden");
+          page.classList.add("page--sidebar-hidden");
+        }
+
         toggleBtn.addEventListener("click", function () {
           sidebar.classList.toggle("sidebar--hidden");
           page.classList.toggle("page--sidebar-hidden");
+          // Save state to localStorage
+          localStorage.setItem(
+            "sidebarHidden",
+            sidebar.classList.contains("sidebar--hidden"),
+          );
         });
       });
     </script>

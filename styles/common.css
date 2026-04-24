@@ -173,24 +173,6 @@ textarea {
   padding: 0.5rem 0.75rem;
   margin-bottom: 1.5rem;
   color: var(--text);
-  text-decoration: none;
-  display: block;
-}
-
-.sidebar__brand:hover {
-  color: var(--primary);
-}
-
-.brand {
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.03em;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.brand:hover {
-  color: var(--primary);
 }
 
 .sidebar__nav {

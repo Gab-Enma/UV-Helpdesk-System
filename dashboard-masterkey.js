@@ -49,11 +49,14 @@ let users = [];
 let editingUserId = null;
 
 document.addEventListener("DOMContentLoaded", async function () {
+  console.log("Dashboard loaded");
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
   const user = getCurrentUser();
+  console.log("Current user:", user);
   if (!user || user.role !== "masterkey") {
+    console.error("Not authenticated as masterkey");
     window.location.href = "login.html";
     return;
   }

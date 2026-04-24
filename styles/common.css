@@ -107,6 +107,143 @@ textarea {
   padding: 2rem 1.5rem 3rem;
 }
 
+/* Sidebar Navigation */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  transition: transform 200ms ease;
+}
+
+.sidebar--hidden {
+  transform: translateX(-100%);
+}
+
+.sidebar__toggle {
+  position: fixed;
+  left: 230px;
+  top: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  transition:
+    left 200ms ease,
+    background 150ms ease;
+  color: var(--muted);
+}
+
+.sidebar__toggle:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sidebar--hidden + .sidebar__toggle {
+  left: 10px;
+}
+
+.sidebar__toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 200ms ease;
+}
+
+.sidebar--hidden + .sidebar__toggle svg {
+  transform: rotate(180deg);
+}
+
+.sidebar__brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar__brand:hover {
+  color: var(--primary);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.brand:hover {
+  color: var(--primary);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sidebar__link {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-weight: 500;
+  transition: all 150ms ease;
+  text-decoration: none;
+}
+
+.sidebar__link:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.sidebar__link--active {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--primary);
+}
+
+.sidebar__link--cta {
+  margin-top: auto;
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+}
+
+.sidebar__link--cta:hover {
+  background: var(--primary-hover);
+  color: #fff;
+}
+
+/* Main content with sidebar */
+.page--with-sidebar {
+  margin-left: 220px;
+  max-width: calc(var(--max-width) - 220px);
+  transition: margin-left 200ms ease;
+}
+
+.page--sidebar-hidden {
+  margin-left: 0;
+  max-width: var(--max-width);
+}
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);

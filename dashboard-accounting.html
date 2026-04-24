@@ -8,6 +8,48 @@
     <link rel="stylesheet" href="styles/dashboard.css" />
   </head>
   <body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">Ticketing System</div>
+      <nav class="sidebar__nav">
+        <a
+          href="dashboard-accounting.html"
+          class="sidebar__link sidebar__link--active"
+          >Dashboard</a
+        >
+        <a href="write.html" class="sidebar__link">Write</a>
+        <a href="account.html" class="sidebar__link">Account</a>
+        <a
+          href="#"
+          id="sidebar-logout-btn"
+          class="sidebar__link sidebar__link--cta"
+          >Logout</a
+        >
+      </nav>
+    </aside>
+
+    <!-- Sidebar Toggle Button -->
+    <button
+      class="sidebar__toggle"
+      id="sidebar-toggle"
+      aria-label="Toggle sidebar"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+
+    <!-- Top Navigation -->
     <header class="topbar">
       <div class="brand">Ticketing System - Accounting</div>
       <nav class="nav">
@@ -20,7 +62,7 @@
       </nav>
     </header>
 
-    <main class="page page--dashboard">
+    <main class="page page--dashboard page--with-sidebar">
       <section class="panel">
         <h1 data-category="accounting">Accounting Dashboard</h1>
         <p>Viewing tickets assigned to Accounting.</p>

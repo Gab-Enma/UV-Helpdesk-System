@@ -229,6 +229,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Handle sidebar logout button
+  const sidebarLogoutBtn = document.querySelector("#sidebar-logout-btn");
+  if (sidebarLogoutBtn) {
+    sidebarLogoutBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      logout();
+    });
+  }
+
+  // Sidebar toggle functionality
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("sidebar-toggle");
+  const page = document.querySelector(".page");
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", function () {
+      sidebar.classList.toggle("sidebar--hidden");
+      page.classList.toggle("page--sidebar-hidden");
+    });
+  }
+
   renderTicketsForStudent().catch((error) => {
     console.error("Error rendering tickets:", error);
   });

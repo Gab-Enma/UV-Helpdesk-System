@@ -8,6 +8,43 @@
     <link rel="stylesheet" href="styles/account.css" />
   </head>
   <body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">Ticketing System</div>
+      <nav class="sidebar__nav">
+        <a href="dashboard.html" class="sidebar__link">Dashboard</a>
+        <a href="write.html" class="sidebar__link">Write</a>
+        <a href="account.html" class="sidebar__link sidebar__link--active"
+          >Account</a
+        >
+        <a href="login.html" class="sidebar__link sidebar__link--cta"
+          >Login / Signup</a
+        >
+      </nav>
+    </aside>
+
+    <!-- Sidebar Toggle Button -->
+    <button
+      class="sidebar__toggle"
+      id="sidebar-toggle"
+      aria-label="Toggle sidebar"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+
+    <!-- Top Navigation -->
     <header class="topbar">
       <div class="brand">Ticketing System</div>
       <nav class="nav">
@@ -18,7 +55,7 @@
       </nav>
     </header>
 
-    <main class="page page--account">
+    <main class="page page--account page--with-sidebar">
       <section class="panel">
         <h1>My Account</h1>
         <p>Update your personal details and change your password.</p>

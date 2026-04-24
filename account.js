@@ -160,4 +160,16 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = redirectForUser();
     });
   }
+
+  // Sidebar toggle functionality
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("sidebar-toggle");
+  const page = document.querySelector(".page");
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", function () {
+      sidebar.classList.toggle("sidebar--hidden");
+      page.classList.toggle("page--sidebar-hidden");
+    });
+  }
 });

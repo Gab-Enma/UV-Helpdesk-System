@@ -182,8 +182,8 @@ app.post("/api/tickets/:ticketId/comments", authenticate, (req, res) => {
   };
 
   ticket.comments = ticket.comments || [];
-  saveTickets(tickets);
   ticket.comments.push(comment);
+  saveTickets(tickets);
 
   return res.json(comment);
 });
@@ -213,6 +213,65 @@ app.get("/api/tickets", authenticate, (req, res) => {
   return res
     .status(400)
     .json({ message: "Category or submitter parameter required" });
+});
+
+// Merge localStorage tickets with server tickets (no auth required for initial migration)
+app.post("/api/tickets/merge/local", (req, res) => {
+  const { localTickets } = req.body;
+
+  if (!Array.isArray(localTickets)) {
+    return res
+      .status(400)
+      .json({ message: "localTickets must be an array" });
+  }
+
+  if (localTickets.length === 0) {
+    return res.json({ message: "No tickets to merge", merged: 0 });
+  }
+
+  let mergedCount = 0;
+
+  for (const localTicket of localTickets) {
+    // Check if ticket already exists (by title, category, and createdAt to avoid duplicates)
+    const exists = tickets.some(
+      (t) =>
+        t.title === localTicket.title &&
+        t.category === localTicket.category &&
+        t.createdAt === localTicket.createdAt,
+    );
+
+    if (exists) {
+      console.log(`Skipping duplicate: ${localTicket.title}`);
+      continue;
+    }
+
+    // Assign new server ID
+    const newId = tickets.length > 0 ? Math.max(...tickets.map((t) => t.id)) + 1 : 1;
+
+    const serverTicket = {
+      id: newId,
+      title: localTicket.title,
+      description: localTicket.description,
+      priority: localTicket.priority,
+      category: localTicket.category,
+      status: localTicket.status || "Open",
+      createdAt: localTicket.createdAt || new Date().toISOString(),
+      submitterEmail: localTicket.submitterEmail || "unknown@example.com",
+      owner: 0,
+      comments: localTicket.comments || [],
+    };
+
+    tickets.push(serverTicket);
+    mergedCount++;
+    console.log(`✓ Merged ticket: ${serverTicket.title} (ID: ${newId})`);
+  }
+
+  saveTickets(tickets);
+  res.json({
+    message: `Merged ${mergedCount} tickets`,
+    merged: mergedCount,
+    total: tickets.length,
+  });
 });
 
 // ============ MASTERKEY ADMIN ENDPOINTS ============

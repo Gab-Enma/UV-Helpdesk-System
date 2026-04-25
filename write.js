@@ -95,41 +95,48 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const newTicket = {
-        id: Date.now(),
         title,
         description,
         priority,
         category,
-        status: "Open",
-        createdAt: new Date().toISOString(),
-        submitterEmail: user ? user.email : "",
-        comments: [],
         attachments: attachments,
       };
 
-      // Persist in local storage first
-      const tickets = getTickets();
-      tickets.push(newTicket);
-      setTickets(tickets);
-
-      // Try to sync with API if available
+      // Save to server first if authenticated
       if (token) {
         try {
-          await apiRequest(
+          const serverTicket = await apiRequest(
             "/tickets",
             "POST",
-            {
-              title,
-              description,
-              priority,
-              category,
-              attachments: attachments,
-            },
+            newTicket,
             token,
           );
+          // Save server response to localStorage with server ID
+          const tickets = getTickets();
+          const ticketToSave = {
+            ...serverTicket,
+            attachments: attachments,
+          };
+          tickets.push(ticketToSave);
+          setTickets(tickets);
         } catch (apiError) {
-          console.warn("API sync failed, ticket saved locally:", apiError);
+          console.error("Failed to submit ticket to server:", apiError);
+          alert("Error submitting ticket: " + apiError.message);
+          return;
         }
+      } else {
+        // Fallback: save to localStorage only if not authenticated
+        const localTicket = {
+          id: Date.now(),
+          ...newTicket,
+          status: "Open",
+          createdAt: new Date().toISOString(),
+          submitterEmail: user ? user.email : "",
+          comments: [],
+        };
+        const tickets = getTickets();
+        tickets.push(localTicket);
+        setTickets(tickets);
       }
 
       alert("Ticket submitted and routed to " + category + " dashboard.");

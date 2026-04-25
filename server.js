@@ -201,6 +201,11 @@ function authenticateAdmin(req, res, next) {
   next();
 }
 
+// Get all tickets (masterkey only)
+app.get("/api/admin/tickets", authenticateAdmin, (req, res) => {
+  res.json(tickets);
+});
+
 // Get all users
 app.get("/api/admin/users", authenticateAdmin, (req, res) => {
   const userList = users.map((u) => ({

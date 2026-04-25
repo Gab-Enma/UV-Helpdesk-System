@@ -66,11 +66,10 @@ function logout() {
 }
 
 async function renderTicketsForCategory(category) {
-  let tickets = getTickets().filter((t) => t.category === category);
-  console.log("All tickets:", getTickets());
-  console.log("Filtered tickets for category", category, ":", tickets);
-
   const token = localStorage.getItem("authToken");
+  let tickets = [];
+
+  // Try to fetch from server first
   if (token) {
     try {
       const apiTickets = await apiRequest(
@@ -79,13 +78,21 @@ async function renderTicketsForCategory(category) {
         null,
         token,
       );
-      if (apiTickets.length > 0) {
-        tickets = apiTickets; // Use API tickets if available
-        console.log("Using API tickets:", apiTickets);
-      }
+      tickets = apiTickets;
+      console.log("Using API tickets:", apiTickets);
+      // Update localStorage with server data
+      setTickets(apiTickets);
     } catch (apiError) {
-      console.warn("API ticket fetch failed, using local tickets:", apiError);
+      console.warn(
+        "API ticket fetch failed, falling back to local tickets:",
+        apiError,
+      );
+      // Fall back to localStorage
+      tickets = getTickets().filter((t) => t.category === category);
     }
+  } else {
+    // No token, use localStorage only
+    tickets = getTickets().filter((t) => t.category === category);
   }
 
   console.log("Final tickets to render:", tickets);
@@ -291,70 +298,72 @@ async function renderTicketsForCategory(category) {
         if (!commentText) return;
         const ticketId = t.id || t._id;
 
-        try {
-          await apiRequest(
-            `/tickets/${ticketId}/comments`,
-            "POST",
-            { text: commentText },
-            token,
-          );
-        } catch (apiError) {
-          console.warn(
-            "API comment add failed, using local fallback:",
-            apiError,
-          );
+        if (token) {
+          try {
+            await apiRequest(
+              `/tickets/${ticketId}/comments`,
+              "POST",
+              { text: commentText },
+              token,
+            );
+            updateTicketCommentsInLocal(ticketId, commentText);
+          } catch (apiError) {
+            console.error("Failed to add comment on server:", apiError);
+            alert("Error adding comment: " + apiError.message);
+            return;
+          }
+        } else {
+          updateTicketCommentsInLocal(ticketId, commentText);
         }
 
-        if (updateTicketCommentsInLocal(ticketId, commentText)) {
-          // Add new comment to display
-          const newCommentDiv = document.createElement("div");
-          newCommentDiv.style.border = "1px solid var(--border)";
-          newCommentDiv.style.borderRadius = "5px";
-          newCommentDiv.style.padding = "0.5rem";
-          newCommentDiv.style.marginBottom = "0.5rem";
-          newCommentDiv.innerHTML = `<strong>${
-            user.name || user.email
-          }</strong> (${new Date().toLocaleString()}): ${commentText}`;
-          commentsSection.insertBefore(newCommentDiv, commentWrapper);
-          commentTextarea.value = "";
-          alert("Comment added.");
-        }
+        // Add new comment to display
+        const newCommentDiv = document.createElement("div");
+        newCommentDiv.style.border = "1px solid var(--border)";
+        newCommentDiv.style.borderRadius = "5px";
+        newCommentDiv.style.padding = "0.5rem";
+        newCommentDiv.style.marginBottom = "0.5rem";
+        newCommentDiv.innerHTML = `<strong>${
+          user.name || user.email
+        }</strong> (${new Date().toLocaleString()}): ${commentText}`;
+        commentsSection.insertBefore(newCommentDiv, commentWrapper);
+        commentTextarea.value = "";
       });
 
       statusSelect.addEventListener("change", async (event) => {
         const newStatus = event.target.value;
         const ticketId = t.id || t._id;
 
-        try {
-          await apiRequest(
-            `/tickets/${ticketId}`,
-            "PUT",
-            { status: newStatus },
-            token,
-          );
-        } catch (apiError) {
-          console.warn(
-            "API ticket update failed, falling back to local update:",
-            apiError,
-          );
+        if (token) {
+          try {
+            await apiRequest(
+              `/tickets/${ticketId}`,
+              "PUT",
+              { status: newStatus },
+              token,
+            );
+            updateTicketStatusInLocal(ticketId, newStatus);
+          } catch (apiError) {
+            console.error("Failed to update status on server:", apiError);
+            alert("Error updating status: " + apiError.message);
+            statusSelect.value = t.status;
+            return;
+          }
+        } else {
+          updateTicketStatusInLocal(ticketId, newStatus);
         }
 
-        if (updateTicketStatusInLocal(ticketId, newStatus)) {
-          t.status = newStatus;
-          meta.querySelector(".ticket-status").textContent = newStatus;
+        t.status = newStatus;
+        meta.querySelector(".ticket-status").textContent = newStatus;
 
-          const updatedTickets = getTickets().filter(
-            (tk) => tk.category === category,
-          );
-          document.querySelector(".stat-open").textContent =
-            updatedTickets.filter((tk) => tk.status === "Open").length;
-          document.querySelector(".stat-progress").textContent =
-            updatedTickets.filter((tk) => tk.status === "In Progress").length;
-          document.querySelector(".stat-resolved").textContent =
-            updatedTickets.filter((tk) => tk.status === "Resolved").length;
-
-          alert(`Ticket \"${t.title}\" status updated to \"${newStatus}\".`);
-        }
+        const updatedTickets = getTickets().filter(
+          (tk) => tk.category === category,
+        );
+        document.querySelector(".stat-open").textContent =
+          updatedTickets.filter((tk) => tk.status === "Open").length;
+        document.querySelector(".stat-progress").textContent =
+          updatedTickets.filter((tk) => tk.status === "In Progress").length;
+        document.querySelector(".stat-resolved").textContent =
+          updatedTickets.filter((tk) => tk.status === "Resolved").length;
       });
     }
 

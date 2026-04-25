@@ -4,11 +4,28 @@
  */
 
 async function migrateTicketsToServer() {
+  // Debug: Show what's stored
+  console.log("=== DEBUG INFO ===");
+  console.log("authToken:", localStorage.getItem("authToken"));
+  console.log("currentUser:", localStorage.getItem("currentUser"));
+  console.log("localStorage keys:", Object.keys(localStorage));
+  console.log("==================");
+
   const token = localStorage.getItem("authToken");
-  if (!token) {
-    console.error("Not authenticated. Please log in first.");
+  const currentUser = localStorage.getItem("currentUser");
+
+  if (!token || !currentUser) {
+    console.error("❌ Authentication failed!");
+    console.error("authToken exists:", !!token);
+    console.error("currentUser exists:", !!currentUser);
+    console.log(
+      "\n📋 Try logging in again in your dashboard, then run this script.",
+    );
     return;
   }
+
+  const user = JSON.parse(currentUser);
+  console.log(`✓ Authenticated as: ${user.email} (${user.role})`);
 
   const localTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
   if (localTickets.length === 0) {
@@ -16,7 +33,7 @@ async function migrateTicketsToServer() {
     return;
   }
 
-  console.log(`Migrating ${localTickets.length} tickets to server...`);
+  console.log(`\nMigrating ${localTickets.length} tickets to server...`);
 
   let successCount = 0;
   for (const ticket of localTickets) {
@@ -76,8 +93,10 @@ async function migrateTicketsToServer() {
   console.log(
     `\n✓ Migration complete: ${successCount}/${localTickets.length} tickets migrated.`,
   );
-  console.log("Refreshing page...");
-  setTimeout(() => location.reload(), 1000);
+  if (successCount > 0) {
+    console.log("Refreshing page...");
+    setTimeout(() => location.reload(), 1500);
+  }
 }
 
 // Auto-run if tickets exist and user confirms

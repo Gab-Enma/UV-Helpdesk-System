@@ -86,10 +86,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     },
     {
       id: 4,
-      email: "faculty@uv.edu.ph",
-      password: "faculty123",
-      role: "faculty",
-      name: "Faculty Team",
+      email: "sasc@uv.edu.ph",
+      password: "sasc123",
+      role: "sasc",
+      name: "SASC Team",
     },
   ];
 

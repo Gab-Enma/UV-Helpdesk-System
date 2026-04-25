@@ -60,10 +60,10 @@ const users = [
   },
   {
     id: 4,
-    name: "Faculty Team",
-    email: "faculty@uv.edu.ph",
-    password: "faculty123",
-    role: "faculty",
+    name: "SASC Team",
+    email: "sasc@uv.edu.ph",
+    password: "sasc123",
+    role: "sasc",
   },
 ];
 
@@ -220,9 +220,7 @@ app.post("/api/tickets/merge/local", (req, res) => {
   const { localTickets } = req.body;
 
   if (!Array.isArray(localTickets)) {
-    return res
-      .status(400)
-      .json({ message: "localTickets must be an array" });
+    return res.status(400).json({ message: "localTickets must be an array" });
   }
 
   if (localTickets.length === 0) {
@@ -246,7 +244,8 @@ app.post("/api/tickets/merge/local", (req, res) => {
     }
 
     // Assign new server ID
-    const newId = tickets.length > 0 ? Math.max(...tickets.map((t) => t.id)) + 1 : 1;
+    const newId =
+      tickets.length > 0 ? Math.max(...tickets.map((t) => t.id)) + 1 : 1;
 
     const serverTicket = {
       id: newId,

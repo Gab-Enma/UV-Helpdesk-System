@@ -21,7 +21,7 @@ function redirectForUser() {
   if (user.role === "masterkey") return "dashboard-masterkey.html";
   if (user.role === "accounting") return "dashboard-accounting.html";
   if (user.role === "registrar") return "dashboard-registrar.html";
-  if (user.role === "faculty") return "dashboard-faculty.html";
+  if (user.role === "sasc") return "dashboard-sasc.html";
   if (user.role === "student") return "dashboard-student.html";
   return "dashboard.html";
 }

@@ -123,7 +123,7 @@ async function renderTicketsForCategory(category) {
   }
 
   const user = getCurrentUser();
-  const canUpdateStatus = ["accounting", "faculty", "registrar"].includes(
+  const canUpdateStatus = ["accounting", "sasc", "registrar"].includes(
     user?.role,
   );
 

@@ -18,13 +18,16 @@ async function mergeTicketsAutomatically() {
   console.log("Sending to server for merge...");
 
   try {
-    const response = await fetch("http://localhost:3000/api/tickets/merge/local", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "http://localhost:3000/api/tickets/merge/local",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ localTickets: localTickets }),
       },
-      body: JSON.stringify({ localTickets: localTickets }),
-    });
+    );
 
     if (!response.ok) {
       const error = await response.json();

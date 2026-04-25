@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -8,7 +10,32 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(".")); // Serve static files from current directory
 
+// File-based persistence
+const ticketsFile = path.join(__dirname, "tickets.json");
+
+function loadTickets() {
+  try {
+    if (fs.existsSync(ticketsFile)) {
+      const data = fs.readFileSync(ticketsFile, "utf-8");
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error("Error loading tickets:", err);
+  }
+  return [];
+}
+
+function saveTickets(tickets) {
+  try {
+    fs.writeFileSync(ticketsFile, JSON.stringify(tickets, null, 2));
+  } catch (err) {
+    console.error("Error saving tickets:", err);
+  }
+}
+
 // In-memory data store (mock persistence)
+let tickets = loadTickets();
+
 const users = [
   {
     id: 1,
@@ -39,7 +66,6 @@ const users = [
     role: "faculty",
   },
 ];
-let tickets = [];
 
 function createToken(user) {
   return Buffer.from(`${user.email}:${Date.now()}`).toString("base64");
@@ -117,6 +143,7 @@ app.post("/api/tickets", authenticate, (req, res) => {
     comments: [],
   };
   tickets.push(ticket);
+  saveTickets(tickets);
   res.json(ticket);
 });
 
@@ -130,6 +157,7 @@ app.put("/api/tickets/:ticketId", authenticate, (req, res) => {
   const { status } = req.body;
   if (status && ["Open", "In Progress", "Resolved"].includes(status)) {
     ticket.status = status;
+    saveTickets(tickets);
   }
 
   return res.json(ticket);
@@ -154,6 +182,7 @@ app.post("/api/tickets/:ticketId/comments", authenticate, (req, res) => {
   };
 
   ticket.comments = ticket.comments || [];
+  saveTickets(tickets);
   ticket.comments.push(comment);
 
   return res.json(comment);

@@ -65,6 +65,19 @@
         <h1 data-category="accounting">Accounting Dashboard</h1>
         <p>Viewing tickets assigned to Accounting.</p>
 
+        <div class="sort-controls" id="sort-controls" style="display: none; margin-bottom: 1.5rem;">
+          <label for="ticket-sort" style="font-weight: 600; margin-right: 0.5rem;">Sort by:</label>
+          <select id="ticket-sort" style="padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; cursor: pointer;">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="status-open">Open First</option>
+            <option value="status-progress">In Progress First</option>
+            <option value="status-resolved">Resolved First</option>
+            <option value="priority-high">Priority: High to Low</option>
+            <option value="priority-low">Priority: Low to High</option>
+          </select>
+        </div>
+
         <div class="cards">
           <div class="card">
             <h2>Open Tickets</h2>

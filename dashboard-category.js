@@ -65,7 +65,70 @@ function logout() {
   window.location.href = "login.html";
 }
 
-async function renderTicketsForCategory(category) {
+function getSortPreference() {
+  return localStorage.getItem("ticketSortPreference") || "date-desc";
+}
+
+function setSortPreference(sortOption) {
+  localStorage.setItem("ticketSortPreference", sortOption);
+}
+
+function sortTickets(tickets, sortOption) {
+  const sorted = tickets.slice();
+
+  switch (sortOption) {
+    case "date-asc":
+      return sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    
+    case "date-desc":
+      return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    case "status-open":
+      const statusOrder = { "Open": 0, "In Progress": 1, "Resolved": 2 };
+      return sorted.sort((a, b) => {
+        const aOrder = statusOrder[a.status] || 999;
+        const bOrder = statusOrder[b.status] || 999;
+        return aOrder - bOrder;
+      });
+    
+    case "status-progress":
+      return sorted.sort((a, b) => {
+        const statusOrder = { "In Progress": 0, "Open": 1, "Resolved": 2 };
+        const aOrder = statusOrder[a.status] || 999;
+        const bOrder = statusOrder[b.status] || 999;
+        return aOrder - bOrder;
+      });
+    
+    case "status-resolved":
+      return sorted.sort((a, b) => {
+        const statusOrder = { "Resolved": 0, "Open": 1, "In Progress": 2 };
+        const aOrder = statusOrder[a.status] || 999;
+        const bOrder = statusOrder[b.status] || 999;
+        return aOrder - bOrder;
+      });
+    
+    case "priority-high":
+      const priorityOrderHigh = { "High": 0, "Medium": 1, "Low": 2 };
+      return sorted.sort((a, b) => {
+        const aOrder = priorityOrderHigh[a.priority] || 999;
+        const bOrder = priorityOrderHigh[b.priority] || 999;
+        return aOrder - bOrder;
+      });
+    
+    case "priority-low":
+      const priorityOrderLow = { "Low": 0, "Medium": 1, "High": 2 };
+      return sorted.sort((a, b) => {
+        const aOrder = priorityOrderLow[a.priority] || 999;
+        const bOrder = priorityOrderLow[b.priority] || 999;
+        return aOrder - bOrder;
+      });
+    
+    default:
+      return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+}
+
+async function renderTicketsForCategory(category, sortOption = "date-desc") {
   const token = localStorage.getItem("authToken");
   let tickets = [];
 
@@ -97,12 +160,15 @@ async function renderTicketsForCategory(category) {
 
   console.log("Final tickets to render:", tickets);
 
+  // Apply sorting
+  const sortedTickets = sortTickets(tickets, sortOption);
+
   // Rest of the function remains the same
 
   const counts = {
-    open: tickets.filter((t) => t.status === "Open").length,
-    inProgress: tickets.filter((t) => t.status === "In Progress").length,
-    resolved: tickets.filter((t) => t.status === "Resolved").length,
+    open: sortedTickets.filter((t) => t.status === "Open").length,
+    inProgress: sortedTickets.filter((t) => t.status === "In Progress").length,
+    resolved: sortedTickets.filter((t) => t.status === "Resolved").length,
   };
 
   document.querySelector(".stat-open").textContent = counts.open;
@@ -113,7 +179,7 @@ async function renderTicketsForCategory(category) {
   const ticketList = document.createElement("div");
   ticketList.className = "ticket-list";
 
-  if (tickets.length === 0) {
+  if (sortedTickets.length === 0) {
     const noItems = document.createElement("p");
     noItems.className = "muted";
     noItems.textContent = "No tickets in this category yet.";
@@ -127,9 +193,7 @@ async function renderTicketsForCategory(category) {
     user?.role,
   );
 
-  const ordered = tickets
-    .slice()
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const ordered = sortedTickets;
 
   ordered.forEach((t) => {
     const item = document.createElement("div");
@@ -409,6 +473,28 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("#account-name").textContent = user.name || user.email;
   document.querySelector("#role-name").textContent = user.role;
 
+  // Show sort controls for staff roles
+  const sortControls = document.getElementById("sort-controls");
+  const isStaffRole = ["accounting", "sasc", "registrar"].includes(user.role);
+  if (sortControls && isStaffRole) {
+    sortControls.style.display = "block";
+  }
+
+  // Set up sort dropdown
+  const sortDropdown = document.getElementById("ticket-sort");
+  if (sortDropdown && isStaffRole) {
+    const savedSort = getSortPreference();
+    sortDropdown.value = savedSort;
+
+    sortDropdown.addEventListener("change", function (e) {
+      const newSort = e.target.value;
+      setSortPreference(newSort);
+      renderTicketsForCategory(user.role, newSort).catch((error) => {
+        console.error("Error rendering tickets:", error);
+      });
+    });
+  }
+
   const logoutBtn = document.querySelector("#logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function (event) {
@@ -450,7 +536,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  renderTicketsForCategory(user.role).catch((error) => {
+  const savedSort = getSortPreference();
+  renderTicketsForCategory(user.role, savedSort).catch((error) => {
     console.error("Error rendering tickets:", error);
   });
 });

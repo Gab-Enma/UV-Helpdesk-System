@@ -78,53 +78,59 @@ function sortTickets(tickets, sortOption) {
 
   switch (sortOption) {
     case "date-asc":
-      return sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    
+      return sorted.sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      );
+
     case "date-desc":
-      return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
+      return sorted.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+
     case "status-open":
-      const statusOrder = { "Open": 0, "In Progress": 1, "Resolved": 2 };
+      const statusOrder = { Open: 0, "In Progress": 1, Resolved: 2 };
       return sorted.sort((a, b) => {
         const aOrder = statusOrder[a.status] || 999;
         const bOrder = statusOrder[b.status] || 999;
         return aOrder - bOrder;
       });
-    
+
     case "status-progress":
       return sorted.sort((a, b) => {
-        const statusOrder = { "In Progress": 0, "Open": 1, "Resolved": 2 };
+        const statusOrder = { "In Progress": 0, Open: 1, Resolved: 2 };
         const aOrder = statusOrder[a.status] || 999;
         const bOrder = statusOrder[b.status] || 999;
         return aOrder - bOrder;
       });
-    
+
     case "status-resolved":
       return sorted.sort((a, b) => {
-        const statusOrder = { "Resolved": 0, "Open": 1, "In Progress": 2 };
+        const statusOrder = { Resolved: 0, Open: 1, "In Progress": 2 };
         const aOrder = statusOrder[a.status] || 999;
         const bOrder = statusOrder[b.status] || 999;
         return aOrder - bOrder;
       });
-    
+
     case "priority-high":
-      const priorityOrderHigh = { "High": 0, "Medium": 1, "Low": 2 };
+      const priorityOrderHigh = { High: 0, Medium: 1, Low: 2 };
       return sorted.sort((a, b) => {
         const aOrder = priorityOrderHigh[a.priority] || 999;
         const bOrder = priorityOrderHigh[b.priority] || 999;
         return aOrder - bOrder;
       });
-    
+
     case "priority-low":
-      const priorityOrderLow = { "Low": 0, "Medium": 1, "High": 2 };
+      const priorityOrderLow = { Low: 0, Medium: 1, High: 2 };
       return sorted.sort((a, b) => {
         const aOrder = priorityOrderLow[a.priority] || 999;
         const bOrder = priorityOrderLow[b.priority] || 999;
         return aOrder - bOrder;
       });
-    
+
     default:
-      return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return sorted.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
   }
 }
 

@@ -22,6 +22,21 @@
         }
       }
 
+      @keyframes clickPulse {
+        0% {
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+          transform: scale(0.98);
+        }
+        100% {
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+          transform: scale(1);
+        }
+      }
+
       #ticket-sort {
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
@@ -43,8 +58,9 @@
       }
 
       #ticket-sort:active {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12) !important;
-        transform: translateY(-1px);
+        animation: clickPulse 0.4s ease-in-out;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+        transform: scale(0.98);
       }
 
       #ticket-sort:focus {

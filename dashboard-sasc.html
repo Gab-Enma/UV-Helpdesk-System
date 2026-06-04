@@ -6,6 +6,27 @@
     <title>Ticketing System - SASC Dashboard</title>
     <link rel="stylesheet" href="styles/common.css" />
     <link rel="stylesheet" href="styles/dashboard.css" />
+    <style>
+      #ticket-sort {
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      }
+      
+      #ticket-sort:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-2px);
+      }
+      
+      #ticket-sort:focus {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        outline: none;
+        border-color: var(--primary) !important;
+      }
+      
+      #ticket-sort option {
+        padding: 0.5rem;
+      }
+    </style>
   </head>
   <body>
     <!-- Sidebar Navigation -->

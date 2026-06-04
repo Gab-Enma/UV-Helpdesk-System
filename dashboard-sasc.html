@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles/dashboard.css" />
     <style>
       .sort-controls {
-        animation: slideInDown 0.4s ease-out;
+        animation: slideInDown 0.8s ease-out;
       }
 
       @keyframes slideInDown {
@@ -23,15 +23,23 @@
       }
 
       #ticket-sort {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-        background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%) !important;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f9f9f9 100%
+        ) !important;
       }
 
       #ticket-sort:hover {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
         transform: translateY(-2px);
-        background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%) !important;
+        background: linear-gradient(
+          135deg,
+          #f9f9f9 0%,
+          #ffffff 100%
+        ) !important;
       }
 
       #ticket-sort:active {
@@ -43,7 +51,11 @@
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
         outline: none;
         border-color: var(--primary) !important;
-        background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%) !important;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f5f5f5 100%
+        ) !important;
       }
 
       #ticket-sort option {
@@ -52,7 +64,7 @@
 
       /* Smooth color transition for label */
       .sort-controls label {
-        transition: color 0.3s ease;
+        transition: color 0.6s ease;
       }
 
       .sort-controls:hover label {

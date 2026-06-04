@@ -88,28 +88,13 @@ function sortTickets(tickets, sortOption) {
       );
 
     case "status-open":
-      const statusOrder = { Open: 0, "In Progress": 1, Resolved: 2 };
-      return sorted.sort((a, b) => {
-        const aOrder = statusOrder[a.status] || 999;
-        const bOrder = statusOrder[b.status] || 999;
-        return aOrder - bOrder;
-      });
+      return sorted.filter((t) => t.status === "Open");
 
     case "status-progress":
-      return sorted.sort((a, b) => {
-        const statusOrder = { "In Progress": 0, Open: 1, Resolved: 2 };
-        const aOrder = statusOrder[a.status] || 999;
-        const bOrder = statusOrder[b.status] || 999;
-        return aOrder - bOrder;
-      });
+      return sorted.filter((t) => t.status === "In Progress");
 
     case "status-resolved":
-      return sorted.sort((a, b) => {
-        const statusOrder = { Resolved: 0, Open: 1, "In Progress": 2 };
-        const aOrder = statusOrder[a.status] || 999;
-        const bOrder = statusOrder[b.status] || 999;
-        return aOrder - bOrder;
-      });
+      return sorted.filter((t) => t.status === "Resolved");
 
     case "priority-high":
       const priorityOrderHigh = { High: 0, Medium: 1, Low: 2 };
